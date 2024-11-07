@@ -1,0 +1,2488 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.0.1",
+    "title": "Omni Article Api"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json",
+    "application/x-www-form-urlencoded"
+  ],
+  "produces": [
+    "application/json",
+    "text/xml"
+  ],
+  "securityDefinitions": {
+    "ApiKey": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Example header: \"Authorization: Bearer ******\""
+    }
+  },
+  "security": [
+    {
+      "ApiKey": []
+    }
+  ],
+  "paths": {
+    "/articles/{article_id}": {
+      "get": {
+        "description": "Get an article by id",
+        "parameters": [
+          {
+            "name": "article_id",
+            "in": "path",
+            "description": "Article id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ArticleResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/articles": {
+      "get": {
+        "description": "Get articles",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The number of total groups in the last response. Used internally for positioning injected features such as native ads.",
+            "default": 0,
+            "type": "integer"
+          },
+          {
+            "name": "articleOffset",
+            "in": "query",
+            "description": "The number of article groups in the last response. Used internally for paginating the actual articles.",
+            "default": 0,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit",
+            "default": 10,
+            "type": "integer"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Which sorting algorithm to use. Possible values: latest, newsmix, bookmarks, modified, todays",
+            "default": "latest",
+            "type": "string"
+          },
+          {
+            "name": "from_ts",
+            "in": "query",
+            "description": "Only articles from this date and time. Only supported for sort=modified.",
+            "type": "string",
+            "format": "dateTime"
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "description": "Only supported for sort=modified! Get articles which are from this source. Example: source=tt.",
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Only get articles which has this category",
+            "type": "string"
+          },
+          {
+            "name": "topics",
+            "in": "query",
+            "description": "Only get articles which has one of these topics",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "usermix",
+            "in": "query",
+            "description": "A form urlencoded object (usermix[key]=value) of usermix values",
+            "type": "string"
+          },
+          {
+            "name": "organization_topic",
+            "in": "query",
+            "description": "The id of the topic the user wants to see in the topic box",
+            "type": "string"
+          },
+          {
+            "name": "topic_boxes",
+            "in": "query",
+            "description": "A form urlencoded object (topic_boxes[key]=value) of topic_box values",
+            "type": "string"
+          },
+          {
+            "name": "exclusive",
+            "in": "query",
+            "description": "Should include exlusive content for the newsroom",
+            "default": true,
+            "type": "boolean"
+          },
+          {
+            "name": "newsvalue_gt",
+            "in": "query",
+            "description": "Filter articles on newsvalue greater than",
+            "type": "integer"
+          },
+          {
+            "name": "X-Omni-Ad-Free-Offer",
+            "in": "header",
+            "description": "Header responsible for toggling ads",
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ArticlesResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/topics": {
+      "get": {
+        "description": "Get topics",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset",
+            "default": 0,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit",
+            "default": 10,
+            "type": "integer"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "How to sort",
+            "default": "alphabetical",
+            "type": "string"
+          },
+          {
+            "name": "where[type]",
+            "in": "query",
+            "description": "Only include topics based on a field (only \"type\" supported atm)",
+            "type": "string"
+          },
+          {
+            "name": "where_not[type]",
+            "in": "query",
+            "description": "Exclude topics based on a field (only \"type\" supported atm)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TopicsResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/topics/{topic_id}": {
+      "get": {
+        "description": "Get a topic by id",
+        "parameters": [
+          {
+            "name": "topic_id",
+            "in": "path",
+            "description": "Topic id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TopicResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/topicdata": {
+      "get": {
+        "description": "Used by settings-api retrieving data connected to topics",
+        "parameters": [
+          {
+            "name": "topics",
+            "in": "query",
+            "description": "Topic ids",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TopicDataResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Will replace get since we have a problem with too long URI:s",
+        "parameters": [
+          {
+            "name": "topics",
+            "in": "body",
+            "description": "Topic ids",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/TopicDataResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "description": "Search for articles and topics",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Query param",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset",
+            "default": 0,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit",
+            "default": 10,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SearchResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "description": "Get list of all public categories",
+        "parameters": [
+          {
+            "name": "show",
+            "in": "query",
+            "description": "Defining whether to show all categories or only the public ones.",
+            "default": "public",
+            "type": "string",
+            "enum": [
+              "public",
+              "all"
+            ]
+          },
+          {
+            "name": "feature_flag",
+            "in": "query",
+            "description": "Whether to show dividers and categories under the not-default divider.",
+            "type": "string",
+            "enum": [
+              "dividers"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/CategoriesResponse"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salesposter": {
+      "get": {
+        "description": "Get salesposter",
+        "parameters": [
+          {
+            "name": "platform",
+            "in": "query",
+            "description": "Offset",
+            "default": "web",
+            "type": "string",
+            "enum": [
+              "web",
+              "ios",
+              "android"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SalesPosterContainerResponse"
+            }
+          }
+        }
+      }
+    },
+    "/salesposter/ios": {
+      "get": {
+        "description": "Get new salesposter for ios",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SalesPosterContainerResponse"
+            }
+          }
+        }
+      }
+    },
+    "/healthcheck": {
+      "get": {
+        "description": "healthcheck path",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/swagger": {}
+  },
+  "definitions": {
+    "ArticlesResponse": {
+      "type": "object",
+      "required": [
+        "articles",
+        "links"
+      ],
+      "properties": {
+        "articles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Group"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/JsonApiLinks"
+        }
+      }
+    },
+    "ArticleResponse": {
+      "type": "object",
+      "required": [
+        "article",
+        "links"
+      ],
+      "properties": {
+        "article": {
+          "$ref": "#/definitions/Article"
+        },
+        "links": {
+          "$ref": "#/definitions/JsonApiLinks"
+        }
+      }
+    },
+    "TopicsResponse": {
+      "type": "object",
+      "required": [
+        "topics",
+        "links"
+      ],
+      "properties": {
+        "topics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Topic"
+          }
+        },
+        "links": {
+          "$ref": "#/definitions/JsonApiLinks"
+        }
+      }
+    },
+    "TopicResponse": {
+      "type": "object",
+      "required": [
+        "topic",
+        "links"
+      ],
+      "properties": {
+        "topic": {
+          "$ref": "#/definitions/Topic"
+        },
+        "links": {
+          "$ref": "#/definitions/JsonApiLinks"
+        }
+      }
+    },
+    "TopicDataResponse": {
+      "type": "object",
+      "required": [
+        "topics"
+      ],
+      "properties": {
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "topic_id"
+            ],
+            "properties": {
+              "topic_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "SearchResponse": {
+      "type": "object",
+      "required": [
+        "articles",
+        "topics"
+      ],
+      "properties": {
+        "articles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Article"
+          }
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Topic"
+          }
+        }
+      }
+    },
+    "CategoriesResponse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of Component",
+            "enum": [
+              "Category",
+              "CategoryDivider"
+            ]
+          }
+        }
+      }
+    },
+    "SalesPosterContainerResponse": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "JsonApiLinks": {
+      "type": "object",
+      "required": [
+        "self"
+      ],
+      "properties": {
+        "self": {
+          "type": "string",
+          "description": "Canonical link to the current resource"
+        },
+        "next": {
+          "type": "string",
+          "description": "Canonical address to the next page in a list"
+        }
+      }
+    },
+    "Group": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Component"
+      }
+    },
+    "Component": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of Component",
+          "enum": [
+            "Article",
+            "ArticleCarousel",
+            "CategoryHeading",
+            "CategoryLink",
+            "PromoteBox",
+            "StoryHeading",
+            "StoryLink",
+            "Ticker",
+            "TopicBox",
+            "UserTopicBox",
+            "Variants",
+            "Webview",
+            "NewsfeedAdPlaceholder",
+            "BoxButton",
+            "BoxHeading",
+            "Box"
+          ]
+        }
+      }
+    },
+    "Article": {
+      "description": "An article. A collection of resources written by an editor in The CMS",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "article_id",
+            "title",
+            "category",
+            "resources",
+            "tags",
+            "authors",
+            "changes"
+          ],
+          "properties": {
+            "article_id": {
+              "type": "string"
+            },
+            "title": {
+              "$ref": "#/definitions/MainTitle"
+            },
+            "category": {
+              "$ref": "#/definitions/Category"
+            },
+            "resources": {
+              "$ref": "#/definitions/Resources"
+            },
+            "tags": {
+              "$ref": "#/definitions/Topics"
+            },
+            "authors": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Author"
+              }
+            },
+            "changes": {
+              "$ref": "#/definitions/Changes"
+            },
+            "story": {
+              "$ref": "#/definitions/Topic"
+            },
+            "sponsor": {
+              "type": "string",
+              "description": "Human readable string of the article's sponsor"
+            },
+            "sponsor_header": {
+              "type": "object",
+              "description": "Label, image url & it's size   .",
+              "required": [
+                "label"
+              ],
+              "properties": {
+                "logo": {
+                  "type": "string",
+                  "description": "Url with the company short symbol."
+                },
+                "label": {
+                  "type": "string",
+                  "description": "Passion campaign label (e.g. Anons från CompanyName)."
+                },
+                "size": {
+                  "$ref": "#/definitions/Size"
+                }
+              }
+            },
+            "teaser_layout": {
+              "type": "string",
+              "enum": [
+                "Flash",
+                "Large",
+                "Small",
+                "SponsoredSmall",
+                "SponsoredLarge",
+                "PassionLarge",
+                "PassionSmall",
+                "PassionSponsored"
+              ],
+              "default": "Large"
+            },
+            "teaser_decoration": {
+              "type": "object",
+              "$ref": "#/definitions/Decoration"
+            },
+            "article_layout": {
+              "type": "string",
+              "enum": [
+                "Regular",
+                "Sponsored",
+                "Longread",
+                "Q&A",
+                "Fact",
+                "Timeline",
+                "Licensed"
+              ],
+              "default": "Regular"
+            },
+            "main_resource": {
+              "$ref": "#/definitions/Resource"
+            },
+            "main_text": {
+              "$ref": "#/definitions/Text"
+            },
+            "ribbon": {
+              "$ref": "#/definitions/Topic"
+            },
+            "tracking_url": {
+              "type": "string"
+            },
+            "tracking_urls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "swipe_enabled": {
+              "type": "boolean"
+            },
+            "brandmetrics_pixel_url": {
+              "type": "string"
+            },
+            "teaser_beahaviour": {
+              "$ref": "#/definitions/TeaserBehaviours"
+            },
+            "ad_keywords": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "is_premium": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether the article is premium or not."
+            },
+            "promotion_content": {
+              "$ref": "#/definitions/PromotionContent"
+            },
+            "teaser": {
+              "$ref": "#/definitions/Teaser"
+            },
+            "style": {
+              "type": "string",
+              "enum": [
+                "regular",
+                "native",
+                "premium"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "ArticleCarousel": {
+      "type": "object",
+      "description": "Carousel containing a bunch of articles. TBD if it could contain other Group types",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "articles"
+          ],
+          "properties": {
+            "articles": {
+              "$ref": "#/definitions/Group"
+            }
+          }
+        }
+      ]
+    },
+    "CategoryHeading": {
+      "description": "Heading for a group of categories. Check category.feature_category for if it should show a toggle.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "category"
+          ],
+          "properties": {
+            "category": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      ]
+    },
+    "CategoryLink": {
+      "type": "object",
+      "description": "Link for a group of categories.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "category"
+          ],
+          "properties": {
+            "category": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      ]
+    },
+    "PromoteBox": {
+      "type": "object",
+      "description": "A box for promoting content from another app.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "ios_apple_id",
+            "android_app_id",
+            "teasers"
+          ],
+          "properties": {
+            "ios_apple_id": {
+              "type": "string",
+              "description": "The app's id for ios"
+            },
+            "android_app_id": {
+              "type": "string",
+              "description": "The app's id for android"
+            },
+            "teasers": {
+              "required": [
+                "title",
+                "link"
+              ],
+              "properties": {
+                "title": {
+                  "$ref": "#/definitions/Inscription"
+                },
+                "main_resource": {
+                  "$ref": "#/definitions/Resource",
+                  "description": "The thumbnail"
+                },
+                "link": {
+                  "type": "string",
+                  "description": "The uri for opening the other app, if installed."
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "StoryHeading": {
+      "type": "object",
+      "description": "Heading for a group based on story.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "topic"
+          ],
+          "properties": {
+            "topic": {
+              "$ref": "#/definitions/Topic"
+            },
+            "supertag": {
+              "$ref": "#/definitions/Topic"
+            },
+            "teaser_layout": {
+              "type": "string",
+              "enum": [
+                "Regular",
+                "Passion"
+              ],
+              "default": "Regular"
+            }
+          }
+        }
+      ]
+    },
+    "StoryLink": {
+      "type": "object",
+      "description": "Link for a group based on story.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "topic"
+          ],
+          "properties": {
+            "topic": {
+              "$ref": "#/definitions/Topic"
+            },
+            "supertag": {
+              "$ref": "#/definitions/Topic"
+            },
+            "teaser_layout": {
+              "type": "string",
+              "enum": [
+                "Regular",
+                "Passion"
+              ],
+              "default": "Regular"
+            }
+          }
+        }
+      ]
+    },
+    "Ticker": {
+      "type": "object",
+      "description": "A ticker usually containing two items for wich an app may subscribe to real time updates.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "api",
+            "rest_url",
+            "ws_url",
+            "tickers"
+          ],
+          "properties": {
+            "api": {
+              "type": "string",
+              "description": "Which api protocol to expect.",
+              "enum": [
+                "OMS"
+              ]
+            },
+            "rest_url": {
+              "type": "string"
+            },
+            "ws_url": {
+              "type": "string"
+            },
+            "tickers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "display_name": {
+                    "type": "string",
+                    "description": "Name to show to the user."
+                  },
+                  "item_sector": {
+                    "type": "string",
+                    "description": "Id used when fetching data from the stocks data api."
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "TopicBox": {
+      "type": "object",
+      "description": "The TopicBox contains articles related to the topic",
+      "required": [
+        "topic_box_id"
+      ],
+      "properties": {
+        "topic_box_id": {
+          "type": "string",
+          "description": "References the user settings field where the topic is stored"
+        },
+        "topic": {
+          "$ref": "#/definitions/Topic"
+        },
+        "articles": {
+          "type": "array",
+          "description": "References the list of articles related to the topic",
+          "items": {
+            "$ref": "#/definitions/Article"
+          }
+        }
+      }
+    },
+    "Variants": {
+      "type": "object",
+      "description": "Variants of components to be shown depeneding on the choice of option for given selection. The choice is supposedly provided by external service.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "required": [
+            "selection",
+            "options"
+          ],
+          "properties": {
+            "selection": {
+              "type": "string"
+            },
+            "options": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/Component"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Webview": {
+      "type": "object",
+      "description": "Web content loaded from a url, or use content property",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "url",
+            "height",
+            "id"
+          ],
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "height": {
+              "type": "integer"
+            },
+            "id": {
+              "type": "string",
+              "description": "Identifier used for e.g. tracking"
+            },
+            "content": {
+              "type": "string",
+              "description": "Html to put directly into a webview"
+            }
+          }
+        }
+      ]
+    },
+    "NewsfeedAdPlaceholder": {
+      "type": "object",
+      "description": "Placeholder used to define a placement for content display ad",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "native_ad_layout",
+            "native_ad_decoration",
+            "annons_bar_decoration"
+          ],
+          "properties": {
+            "native_ad_layout": {
+              "type": "string",
+              "enum": [
+                "Large",
+                "Small"
+              ]
+            },
+            "native_ad_decoration": {
+              "type": "object"
+            },
+            "annons_bar_decoration": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    "BoxHeading": {
+      "type": "object",
+      "description": "Lead resource used for themed boxes",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "required": [
+            "title",
+            "lead"
+          ],
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "lead": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "$ref": "#/definitions/Inscription"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BoxButton": {
+      "type": "object",
+      "description": "Box button used to redirect user to the themed box's category",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Component"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      ]
+    },
+    "Box": {
+      "type": "object",
+      "description": "Box component used to present special content.",
+      "required": [
+        "header",
+        "articles",
+        "footer"
+      ],
+      "properties": {
+        "header": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BoxHeaderItem"
+          }
+        },
+        "articles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BoxArticlesItem"
+          }
+        },
+        "footer": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BoxFooterItem"
+          }
+        }
+      }
+    },
+    "BoxHeaderItem": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of box header item",
+          "enum": [
+            "Overline",
+            "Title",
+            "Intro"
+          ]
+        }
+      }
+    },
+    "BoxArticlesItem": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of articles item",
+          "enum": [
+            "Article",
+            "Divider"
+          ]
+        }
+      }
+    },
+    "BoxFooterItem": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of box footer item",
+          "enum": [
+            "ReadMoreButton"
+          ]
+        }
+      }
+    },
+    "Resources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Resource"
+      }
+    },
+    "Resource": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of Resource",
+          "enum": [
+            "Byline",
+            "Fact",
+            "Text",
+            "Question",
+            "Answer",
+            "Title",
+            "Carousel",
+            "ExternalImage",
+            "Image",
+            "Url",
+            "Map",
+            "Article",
+            "Subheading",
+            "Quote",
+            "NumberFact",
+            "StoryVignette",
+            "Variants",
+            "Webview",
+            "SalesPosterContainer",
+            "PremiumInformationBox",
+            "HorizontalDivider",
+            "Breakpoint",
+            "ChevronDescription",
+            "OriginByline",
+            "LabeledIcon",
+            "EvergreenArticleLink"
+          ]
+        },
+        "subtype": {
+          "type": "string",
+          "description": "Subtype defines subject of usage the resource",
+          "enum": [
+            "stock",
+            "lead",
+            "youtube"
+          ]
+        },
+        "meta": {
+          "type": "object",
+          "description": "Any metadata added"
+        }
+      }
+    },
+    "Fact": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of Resource",
+          "enum": [
+            "Fact"
+          ]
+        }
+      }
+    },
+    "Quote": {
+      "type": "object",
+      "description": "A quote featured type",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "paragraphs"
+          ],
+          "properties": {
+            "paragraphs": {
+              "$ref": "#/definitions/RichText"
+            },
+            "author": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Author name"
+                }
+              }
+            },
+            "type": {
+              "type": "string",
+              "description": "Type of Resource",
+              "enum": [
+                "Quote"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "NumberFact": {
+      "type": "object",
+      "description": "Custom, number-based fact",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "paragraphs"
+          ],
+          "properties": {
+            "paragraphs": {
+              "$ref": "#/definitions/RichText"
+            },
+            "title": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "The number"
+                }
+              }
+            },
+            "type": {
+              "type": "string",
+              "description": "Type of Resource",
+              "enum": [
+                "NumberFact"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "Carousel": {
+      "type": "object",
+      "description": "A carousel of articles in a topic",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "topic"
+          ],
+          "properties": {
+            "topic": {
+              "$ref": "#/definitions/Topic"
+            }
+          }
+        }
+      ]
+    },
+    "Image": {
+      "type": "object",
+      "description": "An image",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "image_asset"
+          ],
+          "properties": {
+            "image_asset": {
+              "type": "object",
+              "required": [
+                "id",
+                "size"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Image id"
+                },
+                "size": {
+                  "$ref": "#/definitions/Size"
+                }
+              }
+            },
+            "caption": {
+              "$ref": "#/definitions/Inscription",
+              "description": "Image text"
+            },
+            "byline": {
+              "type": "object",
+              "required": [
+                "title"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "description": "Image byline (creator)"
+            },
+            "watermark": {
+              "type": "object",
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string"
+                }
+              },
+              "description": "Optional watermark for image, an url to semi-transparent image to lay over the original one."
+            }
+          }
+        }
+      ]
+    },
+    "ExternalImage": {
+      "type": "object",
+      "description": "An image with a url",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "url"
+          ],
+          "properties": {
+            "url": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Map": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "zoom",
+            "location",
+            "bounds"
+          ],
+          "properties": {
+            "zoom": {
+              "type": "integer"
+            },
+            "location": {
+              "$ref": "#/definitions/Point"
+            },
+            "bounds": {
+              "$ref": "#/definitions/Bounds"
+            }
+          }
+        }
+      ]
+    },
+    "Byline": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "published",
+            "authors",
+            "fallback_email"
+          ],
+          "properties": {
+            "updated": {
+              "type": "string",
+              "format": "dateTime"
+            },
+            "published": {
+              "type": "string",
+              "format": "dateTime"
+            },
+            "authors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "Author id, might be undefined",
+                    "type": "string"
+                  },
+                  "title": {
+                    "description": "Name of an author, might be undefined when newsroom is a news agency",
+                    "type": "string"
+                  },
+                  "newsroom": {
+                    "description": "Authors newsroom or name of news agency. If undefined use the default newsroom defined in the app",
+                    "type": "string"
+                  },
+                  "email": {
+                    "description": "If undefined use fallback_email",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "fallback_email": {
+              "description": "Provided if the newsroom does not want to use personal emails or if personal email is missing",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Text": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "paragraphs"
+          ],
+          "properties": {
+            "paragraphs": {
+              "$ref": "#/definitions/RichText"
+            },
+            "vignette": {
+              "$ref": "#/definitions/Vignette"
+            },
+            "hide_in_teaser": {
+              "type": "boolean",
+              "description": "When true, the main_text resource should not be displayed in teasers."
+            }
+          }
+        }
+      ]
+    },
+    "Question": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "paragraphs",
+            "image_asset"
+          ],
+          "properties": {
+            "paragraphs": {
+              "$ref": "#/definitions/RichText"
+            },
+            "image_asset": {
+              "type": "object",
+              "required": [
+                "id",
+                "size"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Image id"
+                },
+                "size": {
+                  "$ref": "#/definitions/Size"
+                }
+              }
+            },
+            "name": {
+              "type": "string",
+              "description": "Image text"
+            },
+            "title": {
+              "type": "string",
+              "description": "Image byline (creator)"
+            }
+          }
+        }
+      ]
+    },
+    "Answer": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "paragraphs"
+          ],
+          "properties": {
+            "paragraphs": {
+              "$ref": "#/definitions/RichText"
+            }
+          }
+        }
+      ]
+    },
+    "StoryVignette": {
+      "type": "object",
+      "description": "Similar to a Text.vignette, but separate",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "title",
+            "ref"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Text to show"
+            },
+            "ref": {
+              "type": "string",
+              "enum": [
+                "none",
+                "topic",
+                "category"
+              ],
+              "default": "none",
+              "description": "If and what kind of link the vignette may have"
+            },
+            "id": {
+              "type": "string",
+              "description": "The reference id. Set if ref is story or category."
+            },
+            "supertag": {
+              "$ref": "#/definitions/Topic"
+            },
+            "suffix": {
+              "type": "string"
+            },
+            "suffix_separator": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Subheading": {
+      "type": "object",
+      "description": "A heading in the article",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "text": {
+              "$ref": "#/definitions/Inscription"
+            }
+          }
+        }
+      ]
+    },
+    "Title": {
+      "type": "object",
+      "description": "Title of the article",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "text": {
+              "$ref": "#/definitions/Inscription"
+            }
+          }
+        }
+      ]
+    },
+    "Url": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "url",
+            "source"
+          ],
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "decoration": {
+              "type": "object",
+              "properties": {
+                "background": {
+                  "$ref": "#/definitions/Decoration"
+                },
+                "title": {
+                  "$ref": "#/definitions/Decoration"
+                },
+                "source": {
+                  "$ref": "#/definitions/Decoration"
+                }
+              }
+            },
+            "data": {
+              "$ref": "#/definitions/EnrichmentData"
+            }
+          }
+        }
+      ]
+    },
+    "EvergreenArticleLink": {
+      "type": "object",
+      "description": "A link linking to an evergreen article, generated by backend and styled differently from other links by clients.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        },
+        {
+          "required": [
+            "article_id",
+            "title"
+          ],
+          "properties": {
+            "article_id": {
+              "type": "string",
+              "description": "Article linked to"
+            },
+            "title": {
+              "type": "string"
+            },
+            "is_premium": {
+              "type": "boolean",
+              "default": false,
+              "description": "Determines usage of premium primary color or not"
+            },
+            "vignette": {
+              "$ref": "#/definitions/TitleVignette"
+            }
+          }
+        }
+      ]
+    },
+    "Author": {
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "email",
+                  "twitter",
+                  "other"
+                ]
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "newsroom": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "Category": {
+      "type": "object",
+      "required": [
+        "type",
+        "category_id",
+        "title",
+        "color"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "category_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "color": {
+          "$ref": "#/definitions/Color"
+        },
+        "feature_category": {
+          "type": "boolean"
+        },
+        "feature_position": {
+          "type": "integer"
+        },
+        "feature_position_latest": {
+          "type": "integer"
+        },
+        "icon": {
+          "$ref": "#/definitions/Icon"
+        },
+        "usermix_display": {
+          "type": "boolean",
+          "description": "When false, hide this section in the usermix view.",
+          "default": true
+        },
+        "newsmix_display": {
+          "type": "boolean",
+          "description": "When false, hide this section in the newsmix view.",
+          "default": true
+        }
+      }
+    },
+    "CategoryDivider": {
+      "type": "object",
+      "required": [
+        "type",
+        "title"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "Changes": {
+      "type": "object",
+      "description": "All metadata about changes made to this document, as well as readable strings",
+      "required": [
+        "published"
+      ],
+      "properties": {
+        "published": {
+          "type": "string",
+          "format": "dateTime"
+        },
+        "updated": {
+          "type": "string",
+          "format": "dateTime"
+        },
+        "modified": {
+          "type": "string",
+          "format": "dateTime"
+        },
+        "ago": {
+          "type": "string"
+        },
+        "short": {
+          "type": "string"
+        }
+      }
+    },
+    "MainTitle": {
+      "type": "object",
+      "description": "Title of the article",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "vignette": {
+          "$ref": "#/definitions/TitleVignette"
+        }
+      }
+    },
+    "TitleVignette": {
+      "type": "object",
+      "required": [
+        "value",
+        "separator"
+      ],
+      "description": "A string to show before the title value, styled as Primary or Primary Premium.",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "separator": {
+          "type": "string",
+          "description": "The string to show between the vignette and title value."
+        }
+      }
+    },
+    "Topics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Topic"
+      }
+    },
+    "Topic": {
+      "type": "object",
+      "required": [
+        "topic_id",
+        "title",
+        "type"
+      ],
+      "properties": {
+        "topic_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string",
+          "description": "Optional description. Only used by \"supertags\" (e.g. in StoryVignette)"
+        }
+      }
+    },
+    "PromotionContent": {
+      "type": "object",
+      "description": "Promotion content for the article.",
+      "properties": {
+        "title": {
+          "$ref": "#/definitions/Inscription"
+        },
+        "description": {
+          "$ref": "#/definitions/Inscription"
+        },
+        "image_asset": {
+          "type": "object",
+          "required": [
+            "id",
+            "size"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Image id"
+            },
+            "size": {
+              "$ref": "#/definitions/Size"
+            }
+          }
+        },
+        "slug": {
+          "type": "string",
+          "description": "Slug of the article"
+        }
+      }
+    },
+    "RichText": {
+      "type": "array",
+      "description": "SMP Rich Text type.",
+      "items": {
+        "$ref": "#/definitions/Block"
+      }
+    },
+    "Block": {
+      "type": "object",
+      "discriminator": "block_type",
+      "required": [
+        "block_type"
+      ],
+      "properties": {
+        "block_type": {
+          "type": "string",
+          "enum": [
+            "BlockParagraph",
+            "BlockListOrdered",
+            "BlockListUnordered",
+            "BlockListChecked",
+            "BlockQuote",
+            "BlockHeading",
+            "paragraph",
+            "list:unordered"
+          ]
+        }
+      }
+    },
+    "BlockText": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Block"
+        },
+        {
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "text": {
+              "$ref": "#/definitions/Inscription"
+            }
+          }
+        }
+      ]
+    },
+    "BlockParagraph": {
+      "description": "A paragraph",
+      "$ref": "#/definitions/BlockText"
+    },
+    "BlockQuote": {
+      "description": "A block quote",
+      "$ref": "#/definitions/BlockText"
+    },
+    "BlockHeading": {
+      "description": "A heading",
+      "$ref": "#/definitions/BlockText"
+    },
+    "BlockList": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Block"
+        },
+        {
+          "required": [
+            "items"
+          ],
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Inscription"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BlockListOrdered": {
+      "description": "An ordered list",
+      "$ref": "#/definitions/BlockList"
+    },
+    "BlockListUnordered": {
+      "description": "An unordered list",
+      "$ref": "#/definitions/BlockList"
+    },
+    "BlockListChecked": {
+      "description": "A checked list",
+      "$ref": "#/definitions/BlockList"
+    },
+    "Icon": {
+      "type": "object",
+      "description": "An icon url and color",
+      "required": [
+        "image_url",
+        "color"
+      ],
+      "properties": {
+        "image_url": {
+          "type": "string",
+          "description": "Url to a png file"
+        },
+        "color": {
+          "$ref": "#/definitions/Color"
+        }
+      }
+    },
+    "Inscription": {
+      "type": "object",
+      "description": "SMP Text type, External docs https://github.schibsted.io/spt-mediaplatform/formatron/tree/master/article-v5#text",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "The raw text, without any styles"
+        },
+        "markup": {
+          "type": "array",
+          "description": "Styles etc to apply to the text",
+          "items": {
+            "type": "object",
+            "required": [
+              "type",
+              "offset",
+              "length"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "style:strong",
+                  "style:em",
+                  "style:underline",
+                  "style:highlight",
+                  "link:internal",
+                  "link:external"
+                ]
+              },
+              "uri": {
+                "type": "string",
+                "description": "Only used for links.",
+                "example": "tag:82e5d0fcc790d2570e8238c1006e1655e4c8a447"
+              },
+              "offset": {
+                "type": "integer"
+              },
+              "length": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Vignette": {
+      "type": "object",
+      "description": "A vignette is a ball followed by a text. The ball may have a color, and the text may have a color.",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "bullet_color": {
+          "$ref": "#/definitions/Color"
+        },
+        "text_color": {
+          "$ref": "#/definitions/Color"
+        }
+      }
+    },
+    "Color": {
+      "type": "object",
+      "description": "A color consists of R, G, and B",
+      "required": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "properties": {
+        "red": {
+          "type": "integer"
+        },
+        "green": {
+          "type": "integer"
+        },
+        "blue": {
+          "type": "integer"
+        }
+      }
+    },
+    "EnrichmentData": {
+      "type": "object",
+      "description": "Data container for linked resources.",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "canonicalUrl": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        }
+      }
+    },
+    "Point": {
+      "type": "object",
+      "description": "A point on a map expressed as WGS84 latitude/longitude.",
+      "required": [
+        "lat",
+        "lon"
+      ],
+      "properties": {
+        "lat": {
+          "type": "string"
+        },
+        "lon": {
+          "type": "string"
+        }
+      }
+    },
+    "Bounds": {
+      "type": "object",
+      "description": "Bounds represented by two points.",
+      "required": [
+        "sw",
+        "ne"
+      ],
+      "properties": {
+        "sw": {
+          "$ref": "#/definitions/Point"
+        },
+        "ne": {
+          "$ref": "#/definitions/Point"
+        }
+      }
+    },
+    "Size": {
+      "type": "object",
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        }
+      }
+    },
+    "Decoration": {
+      "type": "object",
+      "description": "A set of colors to decorate the teaser",
+      "properties": {
+        "background": {
+          "type": "object",
+          "required": [
+            "dark",
+            "light"
+          ],
+          "properties": {
+            "dark": {
+              "$ref": "#/definitions/Color"
+            },
+            "light": {
+              "$ref": "#/definitions/Color"
+            }
+          }
+        }
+      }
+    },
+    "TeaserBehaviours": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/TeaserBehaviour"
+      }
+    },
+    "TeaserBehaviour": {
+      "type": "object",
+      "required": [
+        "action",
+        "interaction"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "Type of Behaviour",
+          "enum": [
+            "open"
+          ]
+        },
+        "interaction": {
+          "type": "string",
+          "description": "Expected interaction"
+        }
+      }
+    },
+    "TeaserTitle": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "vignette": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "TeaserText": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "TeaserFooter": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "badge",
+            "timestamp"
+          ]
+        }
+      }
+    },
+    "Teaser": {
+      "type": "object",
+      "required": [
+        "title",
+        "layout"
+      ],
+      "properties": {
+        "title": {
+          "type": "object",
+          "description": "TeaserTitle",
+          "$ref": "#/definitions/TeaserTitle"
+        },
+        "layout": {
+          "type": "string",
+          "description": "Teaser layout",
+          "enum": [
+            "large",
+            "small",
+            "addon"
+          ]
+        },
+        "link": {
+          "type": "string"
+        },
+        "image": {
+          "type": "object",
+          "description": "Image or other main resource",
+          "$ref": "#/definitions/Resource"
+        },
+        "text": {
+          "type": "object",
+          "description": "TeaserText",
+          "$ref": "#/definitions/TeaserText"
+        },
+        "footer": {
+          "type": "object",
+          "description": "TeaserFooter",
+          "$ref": "#/definitions/TeaserFooter"
+        }
+      }
+    },
+    "ActionOpen": {
+      "type": "object",
+      "required": [
+        "action",
+        "interaction"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": [
+            "open"
+          ]
+        },
+        "interaction": {
+          "type": "string",
+          "description": "Expected interaction",
+          "enum": [
+            "open-webview"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "description": "Target to open"
+        }
+      }
+    }
+  }
+}
