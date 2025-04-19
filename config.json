@@ -1,0 +1,10 @@
+{
+    "url": "https://raw.githubusercontent.com/jeewanbhatta/test/refs/heads/main/xss-fetch.yaml",
+    "urls": [
+        {
+            "url": "https://raw.githubusercontent.com/jeewanbhatta/test/refs/heads/main/xss-fetch.yaml",
+            "name": "XSS payload"
+        }
+    ]
+}
+
